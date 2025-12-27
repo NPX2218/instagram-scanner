@@ -4,7 +4,7 @@ Find out who doesn't follow you back on Instagram. Available as both a web app a
 
 ## 🌐 Web Version
 
-**[Use it now →](https://NPX2218.github.io/instagram-scanner/)**
+**[Use it now](https://NPX2218.github.io/instagram-scanner/)**
 
 No installation required. Just upload your files and get results instantly in your browser. All processing happens locally—your data never leaves your device.
 
@@ -46,8 +46,7 @@ For those who prefer the command line.
 
 ```
 instagram-scanner/
-├── web/
-│   └── index.html      # Browser-based tool
+├── index.html          # Browser-based tool
 ├── python/
 │   ├── main.py         # Command-line tool
 │   └── files/          # Place your JSON files here (not tracked)
