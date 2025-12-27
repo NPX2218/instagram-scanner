@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instagram Follower Checker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .upload-box {
+        transition: all 0.2s ease;
+      }
+      .upload-box.dragover {
+        border-color: #3b82f6;
+        background-color: #eff6ff;
+      }
+      .upload-box.uploaded {
+        border-color: #22c55e;
+        background-color: #f0fdf4;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 min-h-screen">
+    <div class="max-w-2xl mx-auto px-4 py-12">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <div
+          class="inline-flex items-center justify-center w-16 h-16 bg-pink-100 rounded-2xl mb-4"
+        >
+          <svg
+            class="w-8 h-8 text-pink-600"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+            />
+          </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-900 mb-2">
+          Instagram Follower Checker
+        </h1>
+        <p class="text-slate-600">Find out who doesn't follow you back</p>
+      </div>
+
+      <!-- Instructions -->
+      <div class="bg-white rounded-xl border border-slate-200 p-6 mb-6">
+        <h2 class="font-semibold text-slate-900 mb-3">How to get your data</h2>
+        <ol class="text-sm text-slate-600 space-y-2">
+          <li class="flex gap-3">
+            <span
+              class="flex-shrink-0 w-6 h-6 bg-slate-100 rounded-full flex items-center justify-center text-xs font-medium text-slate-700"
+              >1</span
+            >
+            <span
+              >Go to Instagram → Settings → Account Center → Your information
+              and permissions → Download your information</span
+            >
+          </li>
+          <li class="flex gap-3">
+            <span
+              class="flex-shrink-0 w-6 h-6 bg-slate-100 rounded-full flex items-center justify-center text-xs font-medium text-slate-700"
+              >2</span
+            >
+            <span
+              >Select "Some of your information" and choose only "Followers and
+              following"</span
+            >
+          </li>
+          <li class="flex gap-3">
+            <span
+              class="flex-shrink-0 w-6 h-6 bg-slate-100 rounded-full flex items-center justify-center text-xs font-medium text-slate-700"
+              >3</span
+            >
+            <span
+              >Choose JSON format, then download and extract the ZIP file</span
+            >
+          </li>
+          <li class="flex gap-3">
+            <span
+              class="flex-shrink-0 w-6 h-6 bg-slate-100 rounded-full flex items-center justify-center text-xs font-medium text-slate-700"
+              >4</span
+            >
+            <span
+              >Upload the two files below from the
+              <code class="bg-slate-100 px-1.5 py-0.5 rounded text-pink-600"
+                >followers_and_following</code
+              >
+              folder</span
+            >
+          </li>
+        </ol>
+      </div>
+
+      <!-- Upload Section -->
+      <div id="uploadSection" class="space-y-4 mb-6">
+        <!-- Following Upload -->
+        <div
+          id="followingBox"
+          class="upload-box bg-white rounded-xl border-2 border-dashed border-slate-300 p-6 cursor-pointer hover:border-slate-400"
+        >
+          <input
+            type="file"
+            id="followingInput"
+            accept=".json"
+            class="hidden"
+          />
+          <div class="flex items-center gap-4">
+            <div
+              id="followingIcon"
+              class="flex-shrink-0 w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center"
+            >
+              <svg
+                class="w-6 h-6 text-slate-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-slate-900 font-medium">following.json</p>
+              <p id="followingStatus" class="text-sm text-slate-500">
+                Click to upload or drag and drop
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Followers Upload -->
+        <div
+          id="followersBox"
+          class="upload-box bg-white rounded-xl border-2 border-dashed border-slate-300 p-6 cursor-pointer hover:border-slate-400"
+        >
+          <input
+            type="file"
+            id="followersInput"
+            accept=".json"
+            class="hidden"
+          />
+          <div class="flex items-center gap-4">
+            <div
+              id="followersIcon"
+              class="flex-shrink-0 w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center"
+            >
+              <svg
+                class="w-6 h-6 text-slate-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-slate-900 font-medium">followers_1.json</p>
+              <p id="followersStatus" class="text-sm text-slate-500">
+                Click to upload or drag and drop
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analyze Button -->
+        <button
+          id="analyzeBtn"
+          disabled
+          class="w-full py-3 px-4 bg-pink-600 hover:bg-pink-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors"
+        >
+          Analyze
+        </button>
+      </div>
+
+      <!-- Error Message -->
+      <div
+        id="errorBox"
+        class="hidden bg-red-50 border border-red-200 rounded-xl p-4 mb-6"
+      >
+        <div class="flex gap-3">
+          <svg
+            class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <p id="errorText" class="text-sm text-red-700"></p>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div
+        id="loadingBox"
+        class="hidden bg-white rounded-xl border border-slate-200 p-6 text-center mb-6"
+      >
+        <div class="inline-flex items-center gap-3">
+          <svg
+            class="animate-spin w-5 h-5 text-pink-600"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <span class="text-slate-700 font-medium">Analyzing your data...</span>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="resultsBox" class="hidden">
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div
+            class="bg-white rounded-xl border border-slate-200 p-4 text-center"
+          >
+            <p class="text-2xl font-bold text-slate-900" id="followingCount">
+              0
+            </p>
+            <p class="text-sm text-slate-500">Following</p>
+          </div>
+          <div
+            class="bg-white rounded-xl border border-slate-200 p-4 text-center"
+          >
+            <p class="text-2xl font-bold text-slate-900" id="followersCount">
+              0
+            </p>
+            <p class="text-sm text-slate-500">Followers</p>
+          </div>
+          <div
+            class="bg-white rounded-xl border border-slate-200 p-4 text-center"
+          >
+            <p class="text-2xl font-bold text-pink-600" id="notFollowingCount">
+              0
+            </p>
+            <p class="text-sm text-slate-500">Don't follow back</p>
+          </div>
+        </div>
+
+        <!-- List -->
+        <div
+          class="bg-white rounded-xl border border-slate-200 overflow-hidden"
+        >
+          <div
+            class="px-5 py-4 border-b border-slate-200 flex items-center justify-between"
+          >
+            <h2 class="font-semibold text-slate-900">
+              People who don't follow you back
+            </h2>
+            <button
+              id="copyBtn"
+              class="text-sm text-pink-600 hover:text-pink-700 font-medium flex items-center gap-1.5"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                />
+              </svg>
+              Copy all
+            </button>
+          </div>
+          <div
+            id="resultsList"
+            class="max-h-96 overflow-y-auto divide-y divide-slate-100"
+          ></div>
+        </div>
+
+        <!-- Reset -->
+        <button
+          id="resetBtn"
+          class="w-full mt-6 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors"
+        >
+          Check another account
+        </button>
+      </div>
+
+      <!-- Footer -->
+      <p class="text-center text-xs text-slate-400 mt-10">
+        Your data is processed entirely in your browser. Nothing is uploaded to
+        any server.
+      </p>
+    </div>
+
+    <script>
+      // DOM Elements
+      const followingBox = document.getElementById("followingBox");
+      const followersBox = document.getElementById("followersBox");
+      const followingInput = document.getElementById("followingInput");
+      const followersInput = document.getElementById("followersInput");
+      const followingStatus = document.getElementById("followingStatus");
+      const followersStatus = document.getElementById("followersStatus");
+      const followingIcon = document.getElementById("followingIcon");
+      const followersIcon = document.getElementById("followersIcon");
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const uploadSection = document.getElementById("uploadSection");
+      const errorBox = document.getElementById("errorBox");
+      const errorText = document.getElementById("errorText");
+      const loadingBox = document.getElementById("loadingBox");
+      const resultsBox = document.getElementById("resultsBox");
+      const resultsList = document.getElementById("resultsList");
+      const followingCount = document.getElementById("followingCount");
+      const followersCount = document.getElementById("followersCount");
+      const notFollowingCount = document.getElementById("notFollowingCount");
+      const copyBtn = document.getElementById("copyBtn");
+      const resetBtn = document.getElementById("resetBtn");
+
+      let followingData = null;
+      let followersData = null;
+      let notFollowingBack = [];
+
+      // Sanitize string to prevent XSS
+      function sanitize(str) {
+        if (typeof str !== "string") return "";
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      // Validate JSON structure
+      function isValidJSON(data) {
+        return (
+          data !== null && (typeof data === "object" || Array.isArray(data))
+        );
+      }
+
+      // Extract usernames from Instagram data
+      function extractUsernames(data, key = null) {
+        const usernames = [];
+
+        // Get source array
+        let source = data;
+        if (key && typeof data === "object" && !Array.isArray(data)) {
+          source = data[key] || data;
+        }
+
+        if (!Array.isArray(source)) {
+          source = [source];
+        }
+
+        for (const item of source) {
+          if (typeof item !== "object" || item === null) continue;
+
+          // NEW FORMAT: username in "title"
+          const title = item.title;
+          if (typeof title === "string" && title.trim()) {
+            usernames.push(title.trim());
+            continue;
+          }
+
+          // OLD FORMAT: username in string_list_data -> value
+          const sl = item.string_list_data;
+          if (Array.isArray(sl) && sl.length > 0) {
+            const entry = sl[0];
+
+            if (entry && typeof entry.value === "string") {
+              usernames.push(entry.value);
+              continue;
+            }
+
+            // Extract from href if value missing
+            if (entry && typeof entry.href === "string") {
+              const parts = entry.href.replace(/\/+$/, "").split("/");
+              const username = parts[parts.length - 1];
+              if (username) {
+                usernames.push(username);
+                continue;
+              }
+            }
+          }
+        }
+
+        return usernames;
+      }
+
+      // Show error message
+      function showError(message) {
+        errorText.textContent = message;
+        errorBox.classList.remove("hidden");
+        loadingBox.classList.add("hidden");
+      }
+
+      // Hide error message
+      function hideError() {
+        errorBox.classList.add("hidden");
+      }
+
+      // Update button state
+      function updateAnalyzeButton() {
+        analyzeBtn.disabled = !(followingData && followersData);
+      }
+
+      // Mark upload box as complete
+      function markUploaded(box, icon, status, fileName) {
+        box.classList.add("uploaded");
+        icon.innerHTML =
+          '<svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+        icon.classList.remove("bg-slate-100");
+        icon.classList.add("bg-green-100");
+        status.textContent = fileName;
+        status.classList.remove("text-slate-500");
+        status.classList.add("text-green-600");
+      }
+
+      // Reset upload box
+      function resetUploadBox(box, icon, status) {
+        box.classList.remove("uploaded");
+        icon.innerHTML =
+          '<svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>';
+        icon.classList.add("bg-slate-100");
+        icon.classList.remove("bg-green-100");
+        status.textContent = "Click to upload or drag and drop";
+        status.classList.add("text-slate-500");
+        status.classList.remove("text-green-600");
+      }
+
+      // Reset UI
+      function resetUI() {
+        hideError();
+        resultsBox.classList.add("hidden");
+        loadingBox.classList.add("hidden");
+        uploadSection.classList.remove("hidden");
+        followingInput.value = "";
+        followersInput.value = "";
+        followingData = null;
+        followersData = null;
+        notFollowingBack = [];
+        resetUploadBox(followingBox, followingIcon, followingStatus);
+        resetUploadBox(followersBox, followersIcon, followersStatus);
+        updateAnalyzeButton();
+      }
+
+      // Process a single file
+      async function processFile(file, type) {
+        // Security: Only allow .json files
+        if (!file.name.toLowerCase().endsWith(".json")) {
+          showError("Please upload a JSON file.");
+          return false;
+        }
+
+        // Security: Check file size (max 50MB)
+        if (file.size > 50 * 1024 * 1024) {
+          showError("File too large. Maximum size is 50MB.");
+          return false;
+        }
+
+        try {
+          const text = await file.text();
+
+          // Security: Basic content validation
+          if (text.length > 50 * 1024 * 1024) {
+            showError("File content too large.");
+            return false;
+          }
+
+          const data = JSON.parse(text);
+
+          if (!isValidJSON(data)) {
+            showError("Invalid JSON structure.");
+            return false;
+          }
+
+          if (type === "following") {
+            followingData = data;
+            markUploaded(
+              followingBox,
+              followingIcon,
+              followingStatus,
+              file.name
+            );
+          } else {
+            followersData = data;
+            markUploaded(
+              followersBox,
+              followersIcon,
+              followersStatus,
+              file.name
+            );
+          }
+
+          hideError();
+          updateAnalyzeButton();
+          return true;
+        } catch (e) {
+          showError(
+            "Error parsing JSON file. Please make sure it's valid JSON."
+          );
+          console.error(e);
+          return false;
+        }
+      }
+
+      // Display results
+      function displayResults(following, followers, notFollowing) {
+        followingCount.textContent = following.length;
+        followersCount.textContent = followers.length;
+        notFollowingCount.textContent = notFollowing.length;
+
+        resultsList.innerHTML = "";
+
+        if (notFollowing.length === 0) {
+          resultsList.innerHTML =
+            '<div class="p-8 text-center"><div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-xl mb-3"><svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><p class="text-slate-700 font-medium">Everyone you follow follows you back!</p></div>';
+        } else {
+          for (const username of notFollowing) {
+            const div = document.createElement("div");
+            div.className =
+              "px-5 py-3 flex items-center justify-between hover:bg-slate-50";
+            div.innerHTML =
+              '<span class="text-slate-900">@' +
+              sanitize(username) +
+              '</span><a href="https://instagram.com/' +
+              encodeURIComponent(username) +
+              '" target="_blank" rel="noopener noreferrer" class="text-sm text-pink-600 hover:text-pink-700 font-medium">View profile</a>';
+            resultsList.appendChild(div);
+          }
+        }
+
+        loadingBox.classList.add("hidden");
+        uploadSection.classList.add("hidden");
+        resultsBox.classList.remove("hidden");
+      }
+
+      // Analyze data
+      function analyze() {
+        if (!followingData || !followersData) return;
+
+        hideError();
+        loadingBox.classList.remove("hidden");
+        uploadSection.classList.add("hidden");
+
+        try {
+          const followingList = extractUsernames(
+            followingData,
+            "relationships_following"
+          );
+          const followersList = extractUsernames(followersData);
+
+          const followersSet = new Set(
+            followersList.map((u) => u.toLowerCase())
+          );
+          notFollowingBack = followingList
+            .filter((u) => !followersSet.has(u.toLowerCase()))
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+          displayResults(followingList, followersList, notFollowingBack);
+        } catch (e) {
+          showError(
+            "Error processing data. Please make sure you uploaded valid Instagram data."
+          );
+          uploadSection.classList.remove("hidden");
+          loadingBox.classList.add("hidden");
+          console.error(e);
+        }
+      }
+
+      // Setup drag and drop for a box
+      function setupDragDrop(box, input, type) {
+        box.addEventListener("click", () => input.click());
+
+        box.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          box.classList.add("dragover");
+        });
+
+        box.addEventListener("dragleave", () => {
+          box.classList.remove("dragover");
+        });
+
+        box.addEventListener("drop", (e) => {
+          e.preventDefault();
+          box.classList.remove("dragover");
+
+          const files = e.dataTransfer.files;
+          if (files.length > 0) {
+            processFile(files[0], type);
+          }
+        });
+
+        input.addEventListener("change", (e) => {
+          if (e.target.files.length > 0) {
+            processFile(e.target.files[0], type);
+          }
+        });
+      }
+
+      // Event Listeners
+      setupDragDrop(followingBox, followingInput, "following");
+      setupDragDrop(followersBox, followersInput, "followers");
+
+      analyzeBtn.addEventListener("click", analyze);
+
+      copyBtn.addEventListener("click", () => {
+        if (notFollowingBack.length > 0) {
+          const text = notFollowingBack.map((u) => "@" + u).join("\n");
+          navigator.clipboard.writeText(text).then(() => {
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML =
+              '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Copied!';
+            setTimeout(() => {
+              copyBtn.innerHTML = originalText;
+            }, 2000);
+          });
+        }
+      });
+
+      resetBtn.addEventListener("click", resetUI);
+    </script>
+  </body>
+</html>
