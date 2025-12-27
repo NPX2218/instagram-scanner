@@ -67,4 +67,4 @@ This tool must **not** be:
 
 ## Author
 
-By [Neel Bansal](https://github.com/neelbansal)
+By [Neel Bansal](https://github.com/NPX2218)
